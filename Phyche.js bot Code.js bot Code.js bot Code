@@ -1,0 +1,122 @@
+Phyche.js bot Code
+
+/*Type your code here .. */
+Bot.send('hey friend, We are here to help you! Feel free to answer as you feel like!!');
+Bot.send("I will put forward some statements in front of you , you are requested to rate them on a scale of 1-5(1:Never 2: A few times 3:Sometimes 4:Often 5:Constantly");
+Bot.send('press yes to continue');
+var state = 0;
+var name, ans1, ans2, ans3, ans4, ans5, ans6, ans7, ans8, ans9, ans10, ans11;
+var response = [];
+var count = 0;
+
+async function respond(inputText) {
+	if (state == '0') {
+		if (inputText == 'yes') {
+			Bot.send('Please let me know your name!');
+			state = 1
+		}
+
+	}
+
+	else if (state == '1') {
+		name = inputText;
+		Bot.send('In the last 6 months, have you experienced any symptoms? If so, how often?')
+		if (inputText!== Number){
+			Bot.send('Please enter a number from a scale of 1-5 only')
+		}
+		state = 2
+	}
+
+	else if (state == '2') {
+		ans1 = inputText;
+		Bot.send('I felt that my worry was out of my control. ')
+		state = 3
+	}
+	else if (state == '3') {
+		ans2 = inputText;
+		Bot.send('I had trouble sleeping - I could not fall or stay asleep, and/or didnt feel well-rested when I woke up.');
+		state = 4
+	}
+	else if (state == '4') {
+		ans3 = inputText;
+		Bot.send('Sometimes, people experience a sudden, unexpected wave of intense anxiety or panic, usually lasting not more than 15 minutes.Have you ever experienced something like this?');
+		state = 5
+	}
+	else if (state == '5') {
+		ans4 = inputText;
+		Bot.send('	I was scared that I would lose control, go crazy, or die..');
+		state = 6
+	}
+	else if (state == '6') {
+		ans5 = inputText;
+		Bot.send('I have happy memories about the past!');
+		state = 7
+	}
+	else if (state == '7') {
+		ans6 = inputText;
+		Bot.send('I think the world is a good place to be in! ');
+		state = 8
+	}
+	else if (state == '8') {
+		ans7 = inputText;
+		Bot.send('I felt dizzy, my head was spinning, or felt like I was going to faint.');
+		state = 9
+	}
+	else if (state == '9') {
+		ans8 = inputText;
+		Bot.send('	Did you purposely avoid situations or activities in which you might experience a panic attack?');
+		state = 10
+	}
+	else if (state == '10') {
+		ans9 = inputText;
+		Bot.send('did you experience any traumatic event?');
+		state = 11
+	}
+	else if (state == '11') {
+		ans10 = inputText;
+		Bot.send('I stopped having fun doing things that I used to enjoy.');
+		state = 12
+	}
+	else if (state == '12') {
+		ans11 = inputText;
+		Bot.send('thanks for your responses , you will get to know your status shortly')
+		await CampK12.classify("theradog model", ans1);
+
+		response[0] = await CampK12.classify("theradog model", ans1);
+		
+		response[1] = await CampK12.classify("theradog model", ans2);
+		response[2] = await CampK12.classify("theradog model", ans3);
+		response[3] = await CampK12.classify("theradog model", ans4);
+		response[4] = await CampK12.classify("theradog model", ans5);
+		response[5] = await CampK12.classify("theradog model", ans6);
+		response[6] = await CampK12.classify("theradog model", ans7);
+		response[7] = await CampK12.classify("theradog model", ans8);
+		response[8] = await CampK12.classify("theradog model", ans9);
+		response[9] = await CampK12.classify("theradog model", ans10);
+		response[10] = await CampK12.classify("theradog model", ans11);
+
+
+		for (var i = 0; i < response.length; i++) {
+			if (response[i] == 'Danger') {
+				count++
+			}
+
+		}
+		if (count < 5) {
+			Bot.send('hey you are Good! Relax! Pour out a cup of cold water and Breathe! You will surely feel good!Incase you need assistance we are here to help ! Press yes to return to menu!');
+			state = 0;
+				
+		}
+		else if (count == 5) {
+			Bot.send('Well !Not to worry ! You are fine! We are here to help!');
+			state = 0;
+				Bot.send("press Yes to restart");
+		}
+		else if (count > 5) {
+			Bot.send('Things dont always go how we think them to go...but we are here to help!');
+			state = 0;
+			Bot.send("press Yes to restart");
+		}
+	}
+
+}
